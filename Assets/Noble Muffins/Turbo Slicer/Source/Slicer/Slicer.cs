@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
-
+using System.Collections;
 public class Slicer : MonoBehaviour
 {
 	public TurboSlice turboSlice;
@@ -10,7 +10,8 @@ public class Slicer : MonoBehaviour
 	private Vector3[] slicePlane = new Vector3[3];
 	
 	public string[] onlySlicesCategories;
-	
+
+
 	// Use this for initialization
 	void Start ()
 	{
@@ -53,12 +54,14 @@ public class Slicer : MonoBehaviour
 	
 	private List<Sliceable> pendingSlices = new List<Sliceable>();
 	private List<Sliceable> justSliced = new List<Sliceable>();
+	private List<Sliceable> childSliced = new List<Sliceable>();
 	
 	void OnTriggerEnter(Collider other)
 	{
 		Sliceable otherSliceable = other.GetComponent<Sliceable>();
 		
 		SliceThis(otherSliceable);
+
 	}
 	
 	void OnCollisionEnter(Collision other)
@@ -70,10 +73,46 @@ public class Slicer : MonoBehaviour
 	
 	private void SliceThis(Sliceable otherSliceable)
 	{
-		if(otherSliceable != null && !justSliced.Contains(otherSliceable) && !pendingSlices.Contains(otherSliceable))
+		if(!childSliced.Contains(otherSliceable) && otherSliceable != null && !justSliced.Contains(otherSliceable) && !pendingSlices.Contains(otherSliceable))
 		{
 			pendingSlices.Add(otherSliceable);
+			Debug.Log("slicing: "+otherSliceable.gameObject.name);
+//			this.GetComponent<Collider>().enabled=false;
+
 		}
+	}
+
+
+
+	public IEnumerator DoPerformBlade(){
+//		justSliced.Clear();
+//		this.GetComponent<Collider>().enabled=true;
+		childSliced.Clear();
+		Vector3 tmpPos=transform.position;
+		tmpPos.y=1;
+		transform.position=tmpPos;
+		float toggle=0;
+		float interval=1;
+
+		while (toggle<interval){
+			tmpPos=transform.position;
+			tmpPos.y=Mathf.Lerp(1,-0.2f,toggle/interval);
+			toggle+=Time.deltaTime;
+			yield return new WaitForEndOfFrame();
+		}
+		tmpPos.y=-0.2f;
+		transform.position=tmpPos;
+	}
+
+	public void ClearChild(){
+		childSliced.Clear();
+	}
+
+	void Update(){
+//		if (Input.GetKeyDown(KeyCode.R) ){
+//			ResetBlade();
+//			StartCoroutine(DoPerformBlade() );
+//		}
 	}
 
 	// Update is called once per frame
@@ -92,6 +131,7 @@ public class Slicer : MonoBehaviour
 		{
 			Sliceable other = pendingSlices[0];
 			pendingSlices.RemoveAt(0);
+
 			
 			if(other != null && other.gameObject != null && other.currentlySliceable)
 			{
@@ -102,6 +142,7 @@ public class Slicer : MonoBehaviour
 					foreach(string s in onlySlicesCategories)
 					{
 						stillSlice |= s == other.category;
+//						Debug.Log("still slice: "+stillSlice);
 					}
 				}
 				else
@@ -111,8 +152,17 @@ public class Slicer : MonoBehaviour
 				
 				if(stillSlice)
 				{
+					Vector3 dir1=slicePlane[1]-slicePlane[0];
+					Vector3 dir2=slicePlane[2]-slicePlane[0];
+					Vector3 slicePlaneNormal=Vector3.Cross(dir1,dir2);
+					slicePlaneNormal.y=0;
+
 					GameObject[] results = turboSlice.splitByTriangle(other.gameObject, slicePlane, false);
-					
+					for (int i=0;i<results.Length;i++){
+						childSliced.Add(results[i].GetComponent<Sliceable>() );
+//						results[i].GetComponent<Rigidbody>().AddForce(10*new Vector3(Random.Range(-1,1),0,Random.Range(-1,1)) );
+					}
+
 					if(results[0] != other.gameObject)
 					{	
 						GameObject.Destroy(other.gameObject);
