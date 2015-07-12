@@ -158,6 +158,9 @@ public class Slicer : MonoBehaviour
 					slicePlaneNormal.y=0;
 
 					GameObject[] results = turboSlice.splitByTriangle(other.gameObject, slicePlane, false);
+					for (int i=0;i<slicePlane.Length;i++){
+//						Debug.Log("slice: "+slicePlane[i]);
+					}
 					for (int i=0;i<results.Length;i++){
 						childSliced.Add(results[i].GetComponent<Sliceable>() );
 //						results[i].GetComponent<Rigidbody>().AddForce(10*new Vector3(Random.Range(-1,1),0,Random.Range(-1,1)) );
