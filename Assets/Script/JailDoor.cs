@@ -6,8 +6,12 @@ public class JailDoor : InteractiveObj {
 	public Animator anim;
 	public bool opened=false;
 
-	public virtual bool Interactive(){
-		if (!locked && !opened){
+	public override bool Interactive(){
+		if (locked){
+			return false;
+		}
+
+		if (!opened){
 			return true;
 		}
 		else{

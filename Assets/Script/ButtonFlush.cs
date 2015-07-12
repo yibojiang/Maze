@@ -6,8 +6,9 @@ public class ButtonFlush : InteractiveObj {
 	public GameObject curTip;
 	public Transform tipTransform;
 	public Note notePrefab;
-
 	public AudioClip tipSpawnClip;
+
+
 	public virtual bool Interactive(){
 		if (curTip!=null){
 			return true;
@@ -18,16 +19,18 @@ public class ButtonFlush : InteractiveObj {
 
 	}
 
-	public void GenerateTip(string _message){
+
+
+	public void GenerateTip(string _id,string _qStr,string[] _aStr){
 		if (curTip!=null){
 			Destroy(curTip);
 		}
 		Note note=(Note)Instantiate(notePrefab,tipTransform.transform.position,tipTransform.transform.rotation);
-		note.SetMessage(_message);
+		note.SetData(_id,_qStr,_aStr);
+		note.SetMessage(_qStr);
+
 		curTip=note.gameObject;
 		GetComponent<AudioSource>().PlayOneShot(tipSpawnClip);
-
-
 	}
 
 	public override void Interact(){
@@ -36,8 +39,8 @@ public class ButtonFlush : InteractiveObj {
 	}
 
 	void Update(){
-		if (Input.GetKeyDown(KeyCode.G) ){
-			GenerateTip("独裁者");
-		}
+//		if (Input.GetKeyDown(KeyCode.G) ){
+//			GenerateTip("我告诉你\n其实sdafsad\n1.阿萨德发撒\n2.对萨发生地方",null);
+//		}
 	}
 }

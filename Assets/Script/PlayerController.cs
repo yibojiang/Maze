@@ -31,6 +31,9 @@ public class PlayerController : SingletonMonoBehaviourClass<PlayerController> {
 
 
 	public InteractiveObj curInteract;
+
+
+
 	// Update is called once per frame
 	void Update () {
 
@@ -47,12 +50,15 @@ public class PlayerController : SingletonMonoBehaviourClass<PlayerController> {
 							txtTip.text=curInteract.tip;
 							break;
 						}
+						else{
+							curInteract=null;
+						}
 					}
 				}
 			}
 		}
 
-		if (Input.GetMouseButtonDown(0) ){
+		if (Input.GetMouseButtonDown(0) || Input.GetKeyDown(KeyCode.Q)){
 			if (curInteract!=null){
 				curInteract.Interact();
 			}

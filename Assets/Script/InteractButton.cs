@@ -8,5 +8,6 @@ public class InteractButton : InteractiveObj {
 	}
 	public override void Interact(){
 		this.GetComponent<AudioSource>().Play ();
+		GameManager.instance.MakeChoice(1);
 	}
 }

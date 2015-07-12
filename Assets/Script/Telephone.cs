@@ -18,7 +18,7 @@ public class Telephone : InteractiveObj {
 	}
 	// Use this for initialization
 	void Start () {
-		Ring(FirstTalk);
+//		Ring(FirstTalk);
 	}
 
 	public void Talk(string _text){
@@ -109,7 +109,7 @@ public class Telephone : InteractiveObj {
 		
 		yield return new WaitForSeconds(2);
 		GameManager.instance.HideSubtitle();
-		GameManager.instance.firstTalkPicked=true;
+//		GameManager.instance.firstTalkPicked=true;
 		Putdown();
 	}
 	// Update is called once per frame
