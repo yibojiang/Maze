@@ -27,39 +27,33 @@ public class PlayerController : SingletonMonoBehaviourClass<PlayerController> {
 
 
 
-
+	public InteractiveObj curInteract;
 	// Update is called once per frame
 	void Update () {
+
 		txtTip.text="";
+		curInteract=null;
 		for (int i=0;i<raycaster.Cameras.Length;i++){
 			if (raycaster.Cameras[i].gameObject.activeInHierarchy){
 				raycaster.Raycast(raycaster.Cameras[i].ViewportToScreenPoint(new Vector2(0.5f,0.5f)),out rd);
 				if (rd.Hit3D.collider!=null){
 					if (rd.Hit3D.collider.CompareTag("Interactive") ){
-						Debug.Log(rd.Hit3D.collider.name);
-//						rd.Hit3D.collider.GetComponent<InteractiveObj>().Interact();
-						txtTip.text="Interact";
-						break;
+						curInteract=rd.Hit3D.collider.GetComponent<InteractiveObj>();
+						if (curInteract.Interactive() ){
+							Debug.Log(rd.Hit3D.collider.name);
+							txtTip.text="Interact";
+							break;
+						}
 					}
 				}
 			}
 		}
 
 		if (Input.GetMouseButtonDown(0) ){
-			Debug.Log("Interactice");
-			
-			for (int i=0;i<raycaster.Cameras.Length;i++){
-				if (raycaster.Cameras[i].gameObject.activeInHierarchy){
-					raycaster.Raycast(raycaster.Cameras[i].ViewportToScreenPoint(new Vector2(0.5f,0.5f)),out rd);
-					if (rd.Hit3D.collider!=null){
-						if (rd.Hit3D.collider.CompareTag("Interactive") ){
-//							Debug.Log(rd.Hit3D.collider.name);
-							rd.Hit3D.collider.GetComponent<InteractiveObj>().Interact();
-							break;
-						}
-					}
-				}
+			if (curInteract!=null){
+				curInteract.Interact();
 			}
+
 		}
 
 

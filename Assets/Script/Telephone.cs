@@ -10,6 +10,7 @@ public class Telephone : InteractiveObj {
 
 	public AudioClip playerSpeechClip;
 	public AudioClip otherSpeechClip;
+
 	public System.Action action;
 
 	void Awake(){
@@ -17,7 +18,7 @@ public class Telephone : InteractiveObj {
 	}
 	// Use this for initialization
 	void Start () {
-		Ring(Talk);
+		Ring(FirstTalk);
 	}
 
 	public void Talk(string _text){
@@ -47,6 +48,15 @@ public class Telephone : InteractiveObj {
 		audioSource.PlayOneShot(putdownClip);
 	}
 
+	public override bool Interactive(){
+		if (audioSource.isPlaying){
+			return true;
+		}
+		else{
+			return false;
+		}
+	}
+
 	public override void Interact(){
 		if (audioSource.isPlaying ){
 			Pickup();
@@ -56,11 +66,11 @@ public class Telephone : InteractiveObj {
 		}
     }
 
-	void Talk(){
-		StartCoroutine(DoTalk());
+	void FirstTalk(){
+		StartCoroutine(DoFirstTalk());
 	}
 
-	IEnumerator DoTalk(){
+	IEnumerator DoFirstTalk(){
 		yield return new WaitForSeconds(1);
 		PhoneTalk("No. 0225");
 		
@@ -99,17 +109,17 @@ public class Telephone : InteractiveObj {
 		
 		yield return new WaitForSeconds(2);
 		GameManager.instance.HideSubtitle();
-		
+		GameManager.instance.firstTalkPicked=true;
 	}
 	// Update is called once per frame
 	void Update () {
-		if (Input.GetKeyDown(KeyCode.F) ){
-			if (audioSource.isPlaying ){
-				Interact();
-			}
-			else{
-				Ring(Talk);
-			}
-		}
+//		if (Input.GetKeyDown(KeyCode.F) ){
+//			if (audioSource.isPlaying ){
+//				Interact();
+//			}
+//			else{
+//				Ring(FirstTalk);
+//			}
+//		}
 	}
 }

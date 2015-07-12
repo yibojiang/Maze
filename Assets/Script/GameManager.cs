@@ -80,14 +80,34 @@ public class GameManager : SingletonMonoBehaviourClass<GameManager> {
 		StartCoroutine(DoGameStart() );
 	}
 
+	public bool firstTalkPicked=false;
+
+	public AudioClip gunshotClip;
+	public AudioClip dieClip;
+	public AudioSource audioSource;
 	IEnumerator DoGameStart(){
-		txtStroy.SetText("No. 0225");
-		txtStroy.PlayText();
-		yield return new WaitForSeconds(3);
-		txtStroy.SetText("Wake up.");
+
+
+		while (!firstTalkPicked){
+			yield return new WaitForEndOfFrame();
+		}
+
+		Debug.Log("picked");
+		yield return new WaitForSeconds(5);
+		audioSource.PlayOneShot(dieClip);
 
 		yield return new WaitForSeconds(3);
-		txtStroy.SetText("Please stand in front of the screen.");
+
+		audioSource.PlayOneShot(gunshotClip);
+
+
+//		txtStroy.SetText("No. 0225");
+//		txtStroy.PlayText();
+//		yield return new WaitForSeconds(3);
+//		txtStroy.SetText("Wake up.");
+//
+//		yield return new WaitForSeconds(3);
+//		txtStroy.SetText("Please stand in front of the screen.");
 	}
 	
 	// Update is called once per frame
