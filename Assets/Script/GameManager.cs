@@ -27,6 +27,10 @@ public class GameManager : SingletonMonoBehaviourClass<GameManager> {
 
 	public Telephone phone;
 
+
+
+
+
 	// Use this for initialization
 	void Start () {
 		curCamGroup=camGroup;
@@ -85,6 +89,8 @@ public class GameManager : SingletonMonoBehaviourClass<GameManager> {
 	public AudioClip gunshotClip;
 	public AudioClip dieClip;
 	public AudioSource audioSource;
+
+	public Transform stinkpot;
 	IEnumerator DoGameStart(){
 
 
@@ -109,12 +115,17 @@ public class GameManager : SingletonMonoBehaviourClass<GameManager> {
 //		yield return new WaitForSeconds(3);
 //		txtStroy.SetText("Please stand in front of the screen.");
 	}
+
+
 	
 	// Update is called once per frame
 	void Update () {
 		if (Input.GetKeyDown(KeyCode.R) ){
 			SwitchCameraMode();
 		}
+
+
+
 	}
 
 

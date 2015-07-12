@@ -110,6 +110,7 @@ public class Telephone : InteractiveObj {
 		yield return new WaitForSeconds(2);
 		GameManager.instance.HideSubtitle();
 		GameManager.instance.firstTalkPicked=true;
+		Putdown();
 	}
 	// Update is called once per frame
 	void Update () {

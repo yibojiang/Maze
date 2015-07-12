@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine.UI;
 public class PlayerController : SingletonMonoBehaviourClass<PlayerController> {
 	public Animator handAnim;
@@ -9,6 +10,8 @@ public class PlayerController : SingletonMonoBehaviourClass<PlayerController> {
 	public float rotateSpeed=100;
 	public ScreenRaycaster raycaster;
 	public Text txtTip;
+
+	public List<int> choices;
 
 	// Use this for initialization
 	void Start () {
@@ -41,7 +44,7 @@ public class PlayerController : SingletonMonoBehaviourClass<PlayerController> {
 						curInteract=rd.Hit3D.collider.GetComponent<InteractiveObj>();
 						if (curInteract.Interactive() ){
 							Debug.Log(rd.Hit3D.collider.name);
-							txtTip.text="Interact";
+							txtTip.text=curInteract.tip;
 							break;
 						}
 					}
@@ -53,16 +56,18 @@ public class PlayerController : SingletonMonoBehaviourClass<PlayerController> {
 			if (curInteract!=null){
 				curInteract.Interact();
 			}
+			else{
+				slicer.ClearChild();
+				handAnim.SetTrigger("Cut");
+			}
 
 		}
 
 
-
-
-		if (Input.GetKeyDown(KeyCode.E) ){
-			slicer.ClearChild();
-			handAnim.SetTrigger("Cut");
-		}
+//		if (Input.GetKeyDown(KeyCode.E) ){
+//			slicer.ClearChild();
+//			handAnim.SetTrigger("Cut");
+//		}
 
 		if (Input.GetKey(KeyCode.R)){
 			panObj.transform.Rotate(new Vector3(0,Time.deltaTime*rotateSpeed,0) );
